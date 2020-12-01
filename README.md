@@ -13,6 +13,12 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
 * [ ] Adjustable leg span
 * [ ] Rotation at X / Y / Z axis
 
+### Run Tests
+```sh
+g++ -o test test.cpp
+./test
+```
+
 ### References
 * [Hexapod Inverse Kinematics Equations](https://toglefritz.com/hexapod-inverse-kinematics-equations/) by Toglefritz
 * [Hexapod Inverse Kinematics Simulator](https://toglefritz.com/hexapod-inverse-kinematics-simulator/) (Spreadsheet) by Toglefritz
