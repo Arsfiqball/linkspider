@@ -2,9 +2,15 @@
 #include "linkspider.h"
 
 bool testAngularOfCartesian (double c, double f, double t, double x, double y, double z, double teta, double beta, double alpha, double tolerance) {
-  std::cout << "getAngularOfCartesian(" << x << ", " << y << ", " << z << "):" << std::endl;
+  std::cout << "testAngularOfCartesian(" << x << ", " << y << ", " << z << "):" << std::endl;
 
-  LinkSpider::angular_t angularValues = LinkSpider::getAngularOfCartesian(c, t, f, x, y, z);
+  LinkSpiderLeg leg;
+
+  leg.tibia = t;
+  leg.femur = f;
+  leg.coxa = c;
+
+  LinkSpiderAngular_t angularValues = leg.convert(x, y, z);
 
   if (angularValues.teta - teta > tolerance) {
     std::cout << "- teta  > actual   : " << angularValues.teta << std::endl;

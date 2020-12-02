@@ -1,56 +1,69 @@
+#ifndef LINK_SPIDER
+#define LINK_SPIDER
+
 #include <math.h>
 
-namespace LinkSpider {
-  // Unit: Radians
-  struct angular_t {
-    double teta;
-    double beta;
-    double alpha;
-  };
+struct LinkSpiderAngular_t {
+  double teta;
+  double beta;
+  double alpha;
+};
 
-  double getR (double y, double x) {
-    return sqrt(pow(y, 2) + pow(x, 2));
+class LinkSpiderLeg {
+public:
+  double tibia;
+  double femur;
+  double coxa;
+  double x0;
+  double y0;
+  double z0;
+
+protected:
+  double rotated; // Radian, Counter Clockwise
+
+public:
+  LinkSpiderLeg () {
+    tibia = 9;
+    femur = 5;
+    coxa = 2;
+    x0 = 0;
+    y0 = 0;
+    z0 = 0;
+    rotated = 0;
   }
 
-  double getTeta (double y, double x) {
-    return atan(y / x);
+public:
+  void setRotatedDeg (double deg) {
+    rotated = deg * M_PI / 180;
   }
 
-  double getP (double r, double c) {
-    return r - c;
+public:
+  void setRotatedRad (double rad) {
+    rotated = rad;
   }
 
-  double getU (double p, double z) {
-    return sqrt(pow(p, 2) + pow(z, 2));
-  }
+public:
+  LinkSpiderAngular_t convert (double x, double y, double z) {
+    LinkSpiderAngular_t angularValues;
 
-  double getAlpha (double t, double f, double u) {
-    return acos((pow(t, 2) + pow(f, 2) - pow(u, 2)) / (2 * t * f));
-  }
+    double diffX = x - x0;
+    double diffY = y - y0;
+    double diffZ = z - z0;
 
-  double getGama (double p, double z) {
-    return atan(-z / p);
-  }
+    double rotatedX = diffX * cos(rotated) + diffY * sin(rotated);
+    double rotatedY = diffY * cos(rotated) - diffX * sin(rotated);
 
-  double getBeta (double t, double f, double u, double alpha, double gama) {
-    return acos((pow(u, 2) + pow(f, 2) - pow(t, 2)) / (2 * f * u)) - gama;
-  }
+    double r = sqrt(pow(rotatedY, 2) + pow(rotatedX, 2));
+    double p = r - coxa;
+    double u = sqrt(pow(p, 2) + pow(diffZ, 2));
+    double gama = p > 0 ? atan(-diffZ / p) : M_PI + atan(-diffZ / p);
 
-  // Unit input: centimeter
-  angular_t getAngularOfCartesian (double c, double f, double t, double x, double y, double z) {
-    double r = getR(y, x);
-    double teta = getTeta(y, x);
-    double p = getP(r, c);
-    double u = getU(p, z);
-    double alpha = getAlpha(t, f, u);
-    double gama = p > 0 ? getGama(p, z) : M_PI + getGama(p, z);
-    double beta = getBeta(t, f, u, alpha, gama);
-
-    angular_t angularValues;
-    angularValues.teta = teta;
-    angularValues.beta = beta;
-    angularValues.alpha = alpha;
+    angularValues.teta = atan(rotatedY / rotatedX);
+    angularValues.alpha = acos((pow(tibia, 2) + pow(femur, 2) - pow(u, 2)) / (2 * tibia * femur));
+    angularValues.beta = acos((pow(u, 2) + pow(femur, 2) - pow(tibia, 2)) / (2 * femur * u)) - gama;
 
     return angularValues;
   }
-}
+};
+
+#endif
