@@ -1,0 +1,8 @@
+language: c++
+sudo: false
+compiler:
+  - clang
+  - gcc
+script:
+  - g++ -o test test.cpp
+  - ./test
