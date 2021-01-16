@@ -1,49 +1,41 @@
-#include <iostream>
+#include <cmath>
+#include "submodules/acutest/include/acutest.h"
 #include "linkspider.h"
 
-bool testAngularOfCartesian (double c, double f, double t, double x, double y, double z, double teta, double beta, double alpha, double tolerance) {
-  std::cout << "testAngularOfCartesian(" << x << ", " << y << ", " << z << "):" << std::endl;
+using namespace std;
+
+void test_single_leg_static_position (void) {
+  double tolerance = .005;
 
   LinkSpiderLeg leg;
+  LinkSpiderAngular_t av;
 
-  leg.tibia = t;
-  leg.femur = f;
-  leg.coxa = c;
+  leg.tibia = 9;
+  leg.femur = 5;
+  leg.coxa = 2;
 
-  LinkSpiderAngular_t angularValues = leg.convert(x, y, z);
+  av = leg.convert(2.77, 3.04, -4.93);
+  TEST_CHECK(abs(av.teta - 0.8318) < tolerance);
+  TEST_CHECK(abs(av.beta - 0.9374) < tolerance);
+  TEST_CHECK(abs(av.alpha - 0.5392) < tolerance);
 
-  if (angularValues.teta - teta > tolerance) {
-    std::cout << "- teta  > actual   : " << angularValues.teta << std::endl;
-    std::cout << "- teta  > expected : " << teta << std::endl;
-    return false;
-  }
+  av = leg.convert(2.67, 7.56, -3.25);
+  TEST_CHECK(abs(av.teta - 1.2316) < tolerance);
+  TEST_CHECK(abs(av.beta - 1.2102) < tolerance);
+  TEST_CHECK(abs(av.alpha - 0.8532) < tolerance);
 
-  if (angularValues.beta - beta > tolerance) {
-    std::cout << "- beta  > actual   : " << angularValues.beta << std::endl;
-    std::cout << "- beta  > expected : " << beta << std::endl;
-    return false;
-  }
+  av = leg.convert(2.51, 1.65, -5.86);
+  TEST_CHECK(abs(av.teta - 0.5819) < tolerance);
+  TEST_CHECK(abs(av.beta - 0.5248) < tolerance);
+  TEST_CHECK(abs(av.alpha - 0.6676) < tolerance);
 
-  if (angularValues.alpha - alpha > tolerance) {
-    std::cout << "- alpha > actual   : " << angularValues.alpha << std::endl;
-    std::cout << "- alpha > expected : " << alpha << std::endl;
-    return false;
-  }
-
-  std::cout << "---- [OK]" << std::endl;
-  return true;
+  av = leg.convert(0.48, 1.91, -4.38);
+  TEST_CHECK(abs(av.teta - 1.3245) < tolerance);
+  TEST_CHECK(abs(av.beta - 0.9889) < tolerance);
+  TEST_CHECK(abs(av.alpha - 0.2677) < tolerance);
 }
 
-int main(int argc, char const *argv[]) {
-  const double tolerance = .005;
-  const double coxa = 2; // in centimeter
-  const double femur = 5; // in centimeter
-  const double tibia = 9; // in centimeter
-
-  if (!testAngularOfCartesian(coxa, femur, tibia, 2.77, 3.04, -4.93, 0.8318, 0.9374, 0.5392, tolerance)) return 1;
-  if (!testAngularOfCartesian(coxa, femur, tibia, 2.67, 7.56, -3.25, 1.2316, 1.2102, 0.8532, tolerance)) return 1;
-  if (!testAngularOfCartesian(coxa, femur, tibia, 2.51, 1.65, -5.86, 0.5819, 0.5248, 0.6676, tolerance)) return 1;
-  if (!testAngularOfCartesian(coxa, femur, tibia, 0.48, 1.91, -4.38, 1.3245, 0.9889, 0.2677, tolerance)) return 1;
-
-  return 0;
-}
+TEST_LIST = {
+  { "Test Single Leg Static Position", test_single_leg_static_position },
+  { NULL, NULL }
+};
