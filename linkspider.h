@@ -3,66 +3,104 @@
 
 #include <math.h>
 
-struct LinkSpiderAngular_t {
-  double teta;
-  double beta;
-  double alpha;
-};
-
-class LinkSpiderLeg {
-public:
-  double tibia;
-  double femur;
-  double coxa;
-  double x0;
-  double y0;
-  double z0;
-
+class LinkSpider_Leg
+{
 protected:
-  double rotated; // Radian, Counter Clockwise
+  double anchor[4]; // x0, y0, z0, r0 (rad)
+  double frame[3]; // coxa, femur, tibia (cm)
+  double pwm[2]; // normal pos, ratio per pwm (rad)
+  double angle[3]; // teta, beta, alpha (rad)
 
 public:
-  LinkSpiderLeg () {
-    tibia = 9;
-    femur = 5;
-    coxa = 2;
-    x0 = 0;
-    y0 = 0;
-    z0 = 0;
-    rotated = 0;
+  LinkSpider_Leg() {
+    anchor[0] = 0;
+    anchor[1] = 0;
+    anchor[2] = 0;
+    anchor[3] = 0;
+
+    frame[0] = 4;
+    frame[1] = 4;
+    frame[2] = 4;
+
+    pwm[0] = 0;
+    pwm[1] = 1000 / M_PI;
+
+    angle[0] = 0;
+    angle[1] = 0;
+    angle[2] = 0;
   }
 
 public:
-  void setRotatedDeg (double deg) {
-    rotated = deg * M_PI / 180;
+  void setAnchorPos (double x0, double y0, double z0) {
+    anchor[0] = x0;
+    anchor[1] = y0;
+    anchor[2] = z0;
   }
 
 public:
-  void setRotatedRad (double rad) {
-    rotated = rad;
+  void setAnchorRotRad (double rad) {
+    anchor[3] = rad;
   }
 
 public:
-  LinkSpiderAngular_t convert (double x, double y, double z) {
-    LinkSpiderAngular_t angularValues;
+  void setAnchorRotDeg (double deg) {
+    anchor[3] = deg * M_PI / 180;
+  }
 
-    double diffX = x - x0;
-    double diffY = y - y0;
-    double diffZ = z - z0;
+public:
+  void setFrameLength (double coxa, double femur, double tibia) {
+    frame[0] = coxa;
+    frame[1] = femur;
+    frame[2] = tibia;
+  }
 
-    double rotatedX = diffX * cos(rotated) + diffY * sin(rotated);
-    double rotatedY = diffY * cos(rotated) - diffX * sin(rotated);
+public:
+  void setNormalPosPWM (double value) {
+    pwm[0] = value;
+  }
+
+public:
+  void setRatioRadPWM (double radPerPWM) {
+    pwm[1] = radPerPWM;
+  }
+
+public:
+  void setRatioDegPWM (double degPerPWM) {
+    pwm[1] = degPerPWM * M_PI / 180;
+  }
+
+public:
+  void setTipPos (double x, double y, double z) {
+    double diffX = x - anchor[0];
+    double diffY = y - anchor[1];
+    double diffZ = z - anchor[2];
+
+    double rotatedX = diffX * cos(anchor[3]) + diffY * sin(anchor[3]);
+    double rotatedY = diffY * cos(anchor[3]) - diffX * sin(anchor[3]);
 
     double r = sqrt(pow(rotatedY, 2) + pow(rotatedX, 2));
-    double p = r - coxa;
+    double p = r - frame[0];
     double u = sqrt(pow(p, 2) + pow(diffZ, 2));
     double gama = p > 0 ? atan(-diffZ / p) : M_PI + atan(-diffZ / p);
 
-    angularValues.teta = atan(rotatedY / rotatedX);
-    angularValues.alpha = acos((pow(tibia, 2) + pow(femur, 2) - pow(u, 2)) / (2 * tibia * femur));
-    angularValues.beta = acos((pow(u, 2) + pow(femur, 2) - pow(tibia, 2)) / (2 * femur * u)) - gama;
+    angle[0] = atan(rotatedY / rotatedX);
+    angle[1] = acos((pow(u, 2) + pow(frame[1], 2) - pow(frame[2], 2)) / (2 * frame[1] * u)) - gama;
+    angle[2] = acos((pow(frame[2], 2) + pow(frame[1], 2) - pow(u, 2)) / (2 * frame[2] * frame[1]));
+  }
 
-    return angularValues;
+public:
+  double getAngleRad (unsigned int index) {
+    return angle[index];
+  }
+
+public:
+  double getAngleDeg (unsigned int index) {
+    return angle[index] * 180 / M_PI;
+  }
+
+public:
+  double getAnglePWM (unsigned int index) {
+    return pwm[0] + angle[index] * pwm[1];
   }
 };
 
