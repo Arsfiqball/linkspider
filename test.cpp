@@ -7,6 +7,7 @@ using namespace std;
 
 void test_single_leg_static_position (void) {
   double tolerance = .005;
+  double tolerancePWM = 1;
   double normalPWM = 1500;
   double ratioPWM = (M_PI / 2) / 500;
 
@@ -47,9 +48,9 @@ void test_single_leg_static_position (void) {
 
   TEST_CASE("Check getAnglePWM on <xyz> = 3.1619, -12.3883, 5.9890");
 
-  TEST_CHECK(abs(leg.getAnglePWM(0) - (normalPWM + (-1.3209) * ratioPWM)) < tolerance);
-  TEST_CHECK(abs(leg.getAnglePWM(1) - (normalPWM + (0.6926) * ratioPWM)) < tolerance);
-  TEST_CHECK(abs(leg.getAnglePWM(2) - (normalPWM + (2.8774) * ratioPWM)) < tolerance);
+  TEST_CHECK(abs(leg.getAnglePWM(0) - (normalPWM + (-1.3209) / ratioPWM)) < tolerancePWM);
+  TEST_CHECK(abs(leg.getAnglePWM(1) - (normalPWM + (0.6926) / ratioPWM)) < tolerancePWM);
+  TEST_CHECK(abs(leg.getAnglePWM(2) - (normalPWM + (2.8774) / ratioPWM)) < tolerancePWM);
 
   TEST_CASE("Check getAngleDeg on <xyz> = 3.1619, -12.3883, 5.9890");
 

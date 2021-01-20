@@ -104,7 +104,7 @@ public:
 
 public:
   double getAnglePWM (unsigned int index) {
-    return pwm[index][0] + angle[index] * pwm[index][1];
+    return pwm[index][0] + angle[index] / pwm[index][1];
   }
 };
 
