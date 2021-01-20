@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include "submodules/acutest/include/acutest.h"
 #include "linkspider.h"
 
@@ -6,30 +7,86 @@ using namespace std;
 
 void test_single_leg_static_position (void) {
   double tolerance = .005;
-  double angle[3];
+
   LinkSpider_Leg leg;
 
-  leg.setFrameLength(2, 5, 9);
+  TEST_CASE("ro = 0, anchor = <0, 0, 0>, c = 2.5, f = 4.5, t = 7.5");
 
-  leg.setTipPos(2.77, 3.04, -4.93);
-  TEST_CHECK(abs(leg.getAngleRad(0) - 0.8318) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9374) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(2) - 0.5392) < tolerance);
+  leg.setAnchorRotRad(0);
+  leg.setAnchorPos(0, 0, 0);
+  leg.setFrameLength(2.5, 4.5, 7.5);
 
-  leg.setTipPos(2.67, 7.56, -3.25);
-  TEST_CHECK(abs(leg.getAngleRad(0) - 1.2316) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(1) - 1.2102) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(2) - 0.8532) < tolerance);
+  leg.setTipPos(8.5608, 1.6711, -3.0502);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.1928) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9211) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.1353) < tolerance);
 
-  leg.setTipPos(2.51, 1.65, -5.86);
-  TEST_CHECK(abs(leg.getAngleRad(0) - 0.5819) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(1) - 0.5248) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(2) - 0.6676) < tolerance);
+  leg.setTipPos(8.6064, -9.2439, 2.4098);
+  TEST_CHECK(abs(leg.getAngleRad(0) - (-0.8211)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9211) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 2.0635) < tolerance);
 
-  leg.setTipPos(0.48, 1.91, -4.38);
-  TEST_CHECK(abs(leg.getAngleRad(0) - 1.3245) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9889) < tolerance);
-  TEST_CHECK(abs(leg.getAngleRad(2) - 0.2677) < tolerance);
+  leg.setTipPos(0.6049, 0.8983, -7.9660);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.9782) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - (-0.5926)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.4066) < tolerance);
+
+  leg.setTipPos(3.1619, -12.3883, 5.9890);
+  TEST_CHECK(abs(leg.getAngleRad(0) - (-1.3209)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.6926) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 2.8774) < tolerance);
+
+  TEST_CASE("ro = 0, anchor = <2, -2.5, 0>, c = 4.5, f = 3, t = 5.5");
+
+  leg.setAnchorRotRad(0);
+  leg.setAnchorPos(2, -2.5, 0);
+  leg.setFrameLength(4.5, 3, 5.5);
+
+  leg.setTipPos(8.5443, -0.0057, -6.2693);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.3641) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - (-0.2642)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.7636) < tolerance);
+
+  leg.setTipPos(10.0220, -4.1852, -2.8176);
+  TEST_CHECK(abs(leg.getAngleRad(0) - (-0.2071)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9068) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.0067) < tolerance);
+
+  leg.setTipPos(7.8976, 6.8226, -5.1861);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 1.0067) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - (-0.4070)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 2.7346) < tolerance);
+
+  leg.setTipPos(12.3428, -0.1726, 5.7981);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.2213) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.9496) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 2.8489) < tolerance);
+
+  TEST_CASE("ro = -1.47, anchor = <1, 2, 0>, c = 6.5, f = 8.5, t = 4.5");
+
+  leg.setAnchorRotRad(-1.47);
+  leg.setAnchorPos(1, 2, 0);
+  leg.setFrameLength(6.5, 8.5, 4.5);
+
+  leg.setTipPos(6.2085, -12.9338, 9.0196);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.2356) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.8211) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 2.9917) < tolerance);
+
+  leg.setTipPos(16.1342, 1.8919, 5.6148);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 1.4637) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 1.0210) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.7493) < tolerance);
+
+  leg.setTipPos(11.9597, -4.7161, 0.0309);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.9211) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - 0.5498) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 0.8211) < tolerance);
+
+  leg.setTipPos(7.6058, -2.0480, -10.5817);
+  TEST_CHECK(abs(leg.getAngleRad(0) - 0.9211) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(1) - (-1.0353)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleRad(2) - 1.8493) < tolerance);
 }
 
 TEST_LIST = {
