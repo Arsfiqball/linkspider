@@ -7,8 +7,17 @@ using namespace std;
 
 void test_single_leg_static_position (void) {
   double tolerance = .005;
+  double normalPWM = 1500;
+  double ratioPWM = (M_PI / 2) / 500;
 
   LinkSpider_Leg leg;
+
+  leg.setNormalPosPWM(0, normalPWM);
+  leg.setNormalPosPWM(1, normalPWM);
+  leg.setNormalPosPWM(2, normalPWM);
+  leg.setRatioRadPWM(0, ratioPWM);
+  leg.setRatioRadPWM(1, ratioPWM);
+  leg.setRatioRadPWM(2, ratioPWM);
 
   TEST_CASE("ro = 0, anchor = <0, 0, 0>, c = 2.5, f = 4.5, t = 7.5");
 
@@ -35,6 +44,18 @@ void test_single_leg_static_position (void) {
   TEST_CHECK(abs(leg.getAngleRad(0) - (-1.3209)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.6926) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.8774) < tolerance);
+
+  TEST_CASE("Check getAnglePWM on <xyz> = 3.1619, -12.3883, 5.9890");
+
+  TEST_CHECK(abs(leg.getAnglePWM(0) - (normalPWM + (-1.3209) * ratioPWM)) < tolerance);
+  TEST_CHECK(abs(leg.getAnglePWM(1) - (normalPWM + (0.6926) * ratioPWM)) < tolerance);
+  TEST_CHECK(abs(leg.getAnglePWM(2) - (normalPWM + (2.8774) * ratioPWM)) < tolerance);
+
+  TEST_CASE("Check getAngleDeg on <xyz> = 3.1619, -12.3883, 5.9890");
+
+  TEST_CHECK(abs(leg.getAngleDeg(0) - (-1.3209 * 180 / M_PI)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleDeg(1) - (0.6926 * 180 / M_PI)) < tolerance);
+  TEST_CHECK(abs(leg.getAngleDeg(2) - (2.8774 * 180 / M_PI)) < tolerance);
 
   TEST_CASE("ro = 0, anchor = <2, -2.5, 0>, c = 4.5, f = 3, t = 5.5");
 

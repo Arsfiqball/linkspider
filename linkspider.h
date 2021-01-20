@@ -8,7 +8,7 @@ class LinkSpider_Leg
 protected:
   double anchor[4]; // x0, y0, z0, r0 (rad)
   double frame[3]; // coxa, femur, tibia (cm)
-  double pwm[2]; // normal pos, ratio per pwm (rad)
+  double pwm[3][2]; // normal pos, ratio per pwm (rad)
   double angle[3]; // teta, beta, alpha (rad)
 
 public:
@@ -22,8 +22,12 @@ public:
     frame[1] = 4;
     frame[2] = 4;
 
-    pwm[0] = 0;
-    pwm[1] = 1000 / M_PI;
+    pwm[0][0] = 0;
+    pwm[0][1] = 1000 / M_PI;
+    pwm[1][0] = 0;
+    pwm[1][1] = 1000 / M_PI;
+    pwm[2][0] = 0;
+    pwm[2][1] = 1000 / M_PI;
 
     angle[0] = 0;
     angle[1] = 0;
@@ -55,18 +59,18 @@ public:
   }
 
 public:
-  void setNormalPosPWM (double value) {
-    pwm[0] = value;
+  void setNormalPosPWM (unsigned int index, double value) {
+    pwm[index][0] = value;
   }
 
 public:
-  void setRatioRadPWM (double radPerPWM) {
-    pwm[1] = radPerPWM;
+  void setRatioRadPWM (unsigned int index, double radPerPWM) {
+    pwm[index][1] = radPerPWM;
   }
 
 public:
-  void setRatioDegPWM (double degPerPWM) {
-    pwm[1] = degPerPWM * M_PI / 180;
+  void setRatioDegPWM (unsigned int index, double degPerPWM) {
+    pwm[index][1] = degPerPWM * M_PI / 180;
   }
 
 public:
@@ -100,7 +104,7 @@ public:
 
 public:
   double getAnglePWM (unsigned int index) {
-    return pwm[0] + angle[index] * pwm[1];
+    return pwm[index][0] + angle[index] * pwm[index][1];
   }
 };
 
