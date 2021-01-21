@@ -186,23 +186,26 @@ Example:
 posture.setNormalPos(17, 22, 24, 5);
 ```
 
-##### void setRotationRad(double rx, double ry, double rz)
+##### void posture.setRotationRad(double rx, double ry, double rz)
 Set pitch (rx), roll (ry), yaw (rz) of the body (in Radian). Positive is clockwise rotation transform.
 ```cpp
 #include <cmath>
 posture.setRotationRad(M_PI / 12, - M_PI / 12, M_PI / 12); // 15deg, -15deg, 15deg
 ```
 
-##### void setRotationDeg(double rx, double ry, double rz)
+##### void posture.setRotationDeg(double rx, double ry, double rz)
 Set pitch (rx), roll (ry), yaw (rz) of the body (in Degree). Positive is clockwise rotation transform.
 ```cpp
 posture.setRotationDeg(15, - 15, 15);
 ```
 
-##### double getCoordinate(unsigned int legIndex, unsigned int vectorIndex)
+##### double posture.getCoordinate(unsigned int legIndex, unsigned int vectorIndex)
 Get coordinate of each leg tips
 * legIndex: index of leg [0 = L1, 1 = R1, 2 = L2, 3 = R2, 4 = L3, 5 = R3]
 * vectorIndex: index of vector [0 = x, 1 = y, 2 = z]
+```cpp
+posture.getCoordinate(3, 2); // R2, z
+```
 
 ### Run Tests
 ```sh
