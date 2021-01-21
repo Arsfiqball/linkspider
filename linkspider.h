@@ -6,105 +6,109 @@
 class LinkSpider_Leg
 {
 protected:
-  double anchor[4]; // x0, y0, z0, r0 (rad)
-  double frame[3]; // coxa, femur, tibia (cm)
-  double pwm[3][2]; // normal pos, ratio per pwm (rad)
-  double angle[3]; // teta, beta, alpha (rad)
+  double state_anchor[4]; // x0, y0, z0, r0 (rad)
+  double state_frame[3]; // coxa, femur, tibia (cm)
+  double state_pwm[3][2]; // normal pos, ratio per pwm (rad)
+  double state_target[3]; // x, y, z
+  double computed_angle[3]; // teta, beta, alpha (rad)
 
 public:
   LinkSpider_Leg() {
-    anchor[0] = 0;
-    anchor[1] = 0;
-    anchor[2] = 0;
-    anchor[3] = 0;
+    state_anchor[0] = 0;
+    state_anchor[1] = 0;
+    state_anchor[2] = 0;
+    state_anchor[3] = 0;
 
-    frame[0] = 4;
-    frame[1] = 4;
-    frame[2] = 4;
+    state_frame[0] = 4;
+    state_frame[1] = 4;
+    state_frame[2] = 4;
 
-    pwm[0][0] = 0;
-    pwm[0][1] = 1000 / M_PI;
-    pwm[1][0] = 0;
-    pwm[1][1] = 1000 / M_PI;
-    pwm[2][0] = 0;
-    pwm[2][1] = 1000 / M_PI;
+    state_pwm[0][0] = 0;
+    state_pwm[0][1] = 1000 / M_PI;
+    state_pwm[1][0] = 0;
+    state_pwm[1][1] = 1000 / M_PI;
+    state_pwm[2][0] = 0;
+    state_pwm[2][1] = 1000 / M_PI;
+  }
 
-    angle[0] = 0;
-    angle[1] = 0;
-    angle[2] = 0;
+public:
+  void compute () {
+    double diffX = state_target[0] - state_anchor[0];
+    double diffY = state_target[1] - state_anchor[1];
+    double diffZ = state_target[2] - state_anchor[2];
+
+    double rotatedX = diffX * cos(state_anchor[3]) + diffY * sin(state_anchor[3]);
+    double rotatedY = diffY * cos(state_anchor[3]) - diffX * sin(state_anchor[3]);
+
+    double r = sqrt(pow(rotatedY, 2) + pow(rotatedX, 2));
+    double p = r - state_frame[0];
+    double u = sqrt(pow(p, 2) + pow(diffZ, 2));
+    double gama = p > 0 ? atan(-diffZ / p) : M_PI + atan(-diffZ / p);
+
+    computed_angle[0] = atan(rotatedY / rotatedX);
+    computed_angle[1] = acos((pow(u, 2) + pow(state_frame[1], 2) - pow(state_frame[2], 2)) / (2 * state_frame[1] * u)) - gama;
+    computed_angle[2] = acos((pow(state_frame[2], 2) + pow(state_frame[1], 2) - pow(u, 2)) / (2 * state_frame[2] * state_frame[1]));
   }
 
 public:
   void setAnchorPos (double x0, double y0, double z0) {
-    anchor[0] = x0;
-    anchor[1] = y0;
-    anchor[2] = z0;
+    state_anchor[0] = x0;
+    state_anchor[1] = y0;
+    state_anchor[2] = z0;
   }
 
 public:
   void setAnchorRotRad (double rad) {
-    anchor[3] = rad;
+    state_anchor[3] = rad;
   }
 
 public:
   void setAnchorRotDeg (double deg) {
-    anchor[3] = deg * M_PI / 180;
+    state_anchor[3] = deg * M_PI / 180;
   }
 
 public:
   void setFrameLength (double coxa, double femur, double tibia) {
-    frame[0] = coxa;
-    frame[1] = femur;
-    frame[2] = tibia;
+    state_frame[0] = coxa;
+    state_frame[1] = femur;
+    state_frame[2] = tibia;
   }
 
 public:
   void setNormalPosPWM (unsigned int index, double value) {
-    pwm[index][0] = value;
+    state_pwm[index][0] = value;
   }
 
 public:
   void setRatioRadPWM (unsigned int index, double radPerPWM) {
-    pwm[index][1] = radPerPWM;
+    state_pwm[index][1] = radPerPWM;
   }
 
 public:
   void setRatioDegPWM (unsigned int index, double degPerPWM) {
-    pwm[index][1] = degPerPWM * M_PI / 180;
+    state_pwm[index][1] = degPerPWM * M_PI / 180;
   }
 
 public:
   void setTipPos (double x, double y, double z) {
-    double diffX = x - anchor[0];
-    double diffY = y - anchor[1];
-    double diffZ = z - anchor[2];
-
-    double rotatedX = diffX * cos(anchor[3]) + diffY * sin(anchor[3]);
-    double rotatedY = diffY * cos(anchor[3]) - diffX * sin(anchor[3]);
-
-    double r = sqrt(pow(rotatedY, 2) + pow(rotatedX, 2));
-    double p = r - frame[0];
-    double u = sqrt(pow(p, 2) + pow(diffZ, 2));
-    double gama = p > 0 ? atan(-diffZ / p) : M_PI + atan(-diffZ / p);
-
-    angle[0] = atan(rotatedY / rotatedX);
-    angle[1] = acos((pow(u, 2) + pow(frame[1], 2) - pow(frame[2], 2)) / (2 * frame[1] * u)) - gama;
-    angle[2] = acos((pow(frame[2], 2) + pow(frame[1], 2) - pow(u, 2)) / (2 * frame[2] * frame[1]));
+    state_target[0] = x;
+    state_target[1] = y;
+    state_target[2] = z;
   }
 
 public:
   double getAngleRad (unsigned int index) {
-    return angle[index];
+    return computed_angle[index];
   }
 
 public:
   double getAngleDeg (unsigned int index) {
-    return angle[index] * 180 / M_PI;
+    return computed_angle[index] * 180 / M_PI;
   }
 
 public:
   double getAnglePWM (unsigned int index) {
-    return pwm[index][0] + angle[index] / pwm[index][1];
+    return state_pwm[index][0] + computed_angle[index] / state_pwm[index][1];
   }
 };
 

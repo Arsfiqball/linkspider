@@ -27,21 +27,25 @@ void test_single_leg_static_position (void) {
   leg.setFrameLength(2.5, 4.5, 7.5);
 
   leg.setTipPos(8.5608, 1.6711, -3.0502);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.1928) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.9211) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.1353) < tolerance);
 
   leg.setTipPos(8.6064, -9.2439, 2.4098);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - (-0.8211)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.9211) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.0635) < tolerance);
 
   leg.setTipPos(0.6049, 0.8983, -7.9660);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.9782) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - (-0.5926)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.4066) < tolerance);
 
   leg.setTipPos(3.1619, -12.3883, 5.9890);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - (-1.3209)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.6926) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.8774) < tolerance);
@@ -65,21 +69,25 @@ void test_single_leg_static_position (void) {
   leg.setFrameLength(4.5, 3, 5.5);
 
   leg.setTipPos(8.5443, -0.0057, -6.2693);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.3641) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - (-0.2642)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.7636) < tolerance);
 
   leg.setTipPos(10.0220, -4.1852, -2.8176);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - (-0.2071)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.9068) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.0067) < tolerance);
 
   leg.setTipPos(7.8976, 6.8226, -5.1861);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 1.0067) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - (-0.4070)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.7346) < tolerance);
 
   leg.setTipPos(12.3428, -0.1726, 5.7981);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.2213) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.9496) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.8489) < tolerance);
@@ -91,21 +99,25 @@ void test_single_leg_static_position (void) {
   leg.setFrameLength(6.5, 8.5, 4.5);
 
   leg.setTipPos(6.2085, -12.9338, 9.0196);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.2356) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.8211) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 2.9917) < tolerance);
 
   leg.setTipPos(16.1342, 1.8919, 5.6148);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 1.4637) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 1.0210) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.7493) < tolerance);
 
   leg.setTipPos(11.9597, -4.7161, 0.0309);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.9211) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - 0.5498) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 0.8211) < tolerance);
 
   leg.setTipPos(7.6058, -2.0480, -10.5817);
+  leg.compute();
   TEST_CHECK(abs(leg.getAngleRad(0) - 0.9211) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(1) - (-1.0353)) < tolerance);
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.8493) < tolerance);

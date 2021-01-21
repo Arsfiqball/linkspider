@@ -14,21 +14,34 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
 * [ ] Rotation at X / Y / Z axis
 
 ### LinkSpider API
-The API have several class which have different usage and should be constructed togather to make a correct hexapod control. The API was designed to be as flexible as possible.
+The API have several class which have different usage and should be constructed
+together to make a correct hexapod control. The API was designed to be as
+flexible as possible. In general, lower level classes have four step to follow:
+* Initialization step: declaring object
+* Configuration step: all methods prefixed with **set...**
+* Compute step: **compute** method
+* Access computed property step: all methods prefixed with **get...**
+
+Example:
 ```cpp
 #include <cmath>
 #include "submodules/linkspider/linkspider.h"
 
 // ...
 
+// Initialization step
 LinkSpider_Leg leg;
 
+// Configuration step
 leg.setAnchorRotRad(0);
 leg.setAnchorPos(0, 0, 0);
 leg.setFrameLength(2.5, 4.5, 7.5);
-
 leg.setTipPos(8.5608, 1.6711, -3.0502);
 
+// Compute step
+leg.compute();
+
+// Access computed property step
 leg.getAngleRad(0) // 0.1928
 leg.getAngleRad(1) // 0.9211
 leg.getAngleRad(2) // 1.1353
@@ -42,6 +55,9 @@ This class initializes configuration and controls single leg static position.
 // initialize the object first.
 LinkSpider_Leg leg;
 ```
+
+##### void leg.compute()
+Doing all internal computation
 
 ##### void leg.setAnchorPos(double x0, double y0, double z0)
 Setting coordinate of first servo as the anchor relative to Center of Gravity. Positive x0 is to the right sign, positive y0 is forward, positive z0 is upward. For example, if your first servo point is placed on {x0, y0, z0} = {-4, 9, 0}:
