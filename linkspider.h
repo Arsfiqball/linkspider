@@ -2,6 +2,7 @@
 #define LINK_SPIDER
 
 #include <math.h>
+#include <stdio.h>
 
 class LinkSpider_Leg
 {
@@ -216,6 +217,75 @@ public:
   double getCoordinate (unsigned int legIndex, unsigned int vectorIndex) {
     // legIndex -> [L1, R1, L2, R2, L3, R3], vectorIndex -> [x, y, z]
     return computed_legs[legIndex][vectorIndex];
+  }
+};
+
+class LinkSpider_ConnectorSSC32
+{
+protected:
+  unsigned int state_pins[6][3];
+  unsigned int state_values[6][3];
+  unsigned int state_interval;
+  char computed_printable[200]; // a 200 chars buffer string
+
+public:
+  LinkSpider_ConnectorSSC32 () {
+    for (int i = 0; i < 6; i++) {
+      for (int j = 0; j < 3; j++) {
+        state_pins[i][j] = i * 3 + j;
+        state_values[i][j] = 1500;
+      }
+    }
+
+    state_interval = 200;
+  }
+
+public:
+  void setInterval (unsigned int time) {
+    state_interval = time;
+  }
+
+public:
+  void setServoPin (unsigned int legIndex, unsigned int servoIndex, unsigned int pin) {
+    state_pins[legIndex][servoIndex] = pin;
+  }
+
+public:
+  void setServoValue (unsigned int legIndex, unsigned int servoIndex, double value) {
+    double roundedValue = round(abs(value));
+    state_values[legIndex][servoIndex] = (int) roundedValue;
+  }
+
+public:
+  void compute () {
+    sprintf(
+      computed_printable,
+      "#%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d #%dP%d T%d",
+      state_pins[0][0], state_values[0][0],
+      state_pins[0][1], state_values[0][1],
+      state_pins[0][2], state_values[0][2],
+      state_pins[1][0], state_values[1][0],
+      state_pins[1][1], state_values[1][1],
+      state_pins[1][2], state_values[1][2],
+      state_pins[2][0], state_values[2][0],
+      state_pins[2][1], state_values[2][1],
+      state_pins[2][2], state_values[2][2],
+      state_pins[3][0], state_values[3][0],
+      state_pins[3][1], state_values[3][1],
+      state_pins[3][2], state_values[3][2],
+      state_pins[4][0], state_values[4][0],
+      state_pins[4][1], state_values[4][1],
+      state_pins[4][2], state_values[4][2],
+      state_pins[5][0], state_values[5][0],
+      state_pins[5][1], state_values[5][1],
+      state_pins[5][2], state_values[5][2],
+      state_interval
+    );
+  }
+
+public:
+  char * getPrintable () {
+    return computed_printable;
   }
 };
 
