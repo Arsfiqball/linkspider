@@ -1,6 +1,9 @@
 C ++ based inverse kinematics solver and algorithm for static positioning, walking sequence and adaptability of hexapod robot, with support for PWM based servo driver
 
-<!-- Generated TOC https://magnetikonline.github.io/markdown-toc-generate/ with 2 spaces -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
 - [Features](#features)
 - [LinkSpider API](#linkspider-api)
   - [LinkSpider_Leg leg(void)](#linkspider_leg-legvoid)
@@ -19,11 +22,19 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
   - [LinkSpider_Posture posture(void)](#linkspider_posture-posturevoid)
     - [void posture.compute()](#void-posturecompute)
     - [void posture.setNormalPos(double frs, double ms, double l, double h)](#void-posturesetnormalposdouble-frs-double-ms-double-l-double-h)
-    - [void setRotationRad(double rx, double ry, double rz)](#void-setrotationraddouble-rx-double-ry-double-rz)
-    - [void setRotationDeg(double rx, double ry, double rz)](#void-setrotationdegdouble-rx-double-ry-double-rz)
-    - [double getCoordinate(unsigned int legIndex, unsigned int vectorIndex)](#double-getcoordinateunsigned-int-legindex-unsigned-int-vectorindex)
+    - [void posture.setRotationRad(double rx, double ry, double rz)](#void-posturesetrotationraddouble-rx-double-ry-double-rz)
+    - [void posture.setRotationDeg(double rx, double ry, double rz)](#void-posturesetrotationdegdouble-rx-double-ry-double-rz)
+    - [double posture.getCoordinate(unsigned int legIndex, unsigned int vectorIndex)](#double-posturegetcoordinateunsigned-int-legindex-unsigned-int-vectorindex)
+  - [LinkSpider_ConnectorSSC32 ssc(void)](#linkspider_connectorssc32-sscvoid)
+    - [void ssc.compute()](#void-ssccompute)
+    - [void ssc.setInterval(unsigned int time)](#void-sscsetintervalunsigned-int-time)
+    - [void ssc.setServoPin (unsigned int legIndex, unsigned int servoIndex, unsigned int pin)](#void-sscsetservopin-unsigned-int-legindex-unsigned-int-servoindex-unsigned-int-pin)
+    - [void ssc.setServoValue(unsigned int legIndex, unsigned int servoIndex, double value)](#void-sscsetservovalueunsigned-int-legindex-unsigned-int-servoindex-double-value)
+    - [char * ssc.getPrintable()](#char-sscgetprintable)
 - [Run Tests](#run-tests)
 - [References](#references)
+
+<!-- /code_chunk_output -->
 
 ### Features
 * [x] Convert cartesian coordinates of each leg tips to 3DOF servo angle.
@@ -33,10 +44,10 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
 * [ ] Shift left / right
 * [ ] Turn left / right
 * [ ] Adjustable speed
-* [ ] Adjustable robot height
+* [x] Adjustable robot height
 * [ ] Adjustable step span
-* [ ] Adjustable leg span
-* [ ] Rotation at X / Y / Z axis
+* [x] Adjustable leg span
+* [x] Rotation at X / Y / Z axis
 
 ### LinkSpider API
 The API have several class which have different usage and should be constructed
@@ -205,6 +216,47 @@ Get coordinate of each leg tips
 * vectorIndex: index of vector [0 = x, 1 = y, 2 = z]
 ```cpp
 posture.getCoordinate(3, 2); // R2, z
+```
+
+#### LinkSpider_ConnectorSSC32 ssc(void)
+This class initializes configuration and controls for SSC 32 connection.
+```cpp
+// initialize the object first.
+LinkSpider_ConnectorSSC32 ssc;
+```
+
+##### void ssc.compute()
+Doing all internal computation.
+
+##### void ssc.setInterval(unsigned int time)
+Set SSC-32 time (T) command which controls how quick the servo should move (in miliseconds)
+```cpp
+ssc.setInterval(200); // 200 ms
+```
+
+##### void ssc.setServoPin (unsigned int legIndex, unsigned int servoIndex, unsigned int pin)
+Set SSC-32 pin configuration (P) command for each servos.
+* legIndex: [0 = L1, 1 = R1, 2 = L2, 3 = R2, 4 = L3, 5 = R3]
+* servoIndex: [0 = teta, 1 = beta, 2 = alpha]
+* pin: which pin address the servo is connected to
+```cpp
+ssc.setServoPin(1, 2, 22); // R1, alpha, pin 22
+```
+
+##### void ssc.setServoValue(unsigned int legIndex, unsigned int servoIndex, double value)
+Set servo PWM value.
+* legIndex: [0 = L1, 1 = R1, 2 = L2, 3 = R2, 4 = L3, 5 = R3]
+* servoIndex: [0 = teta, 1 = beta, 2 = alpha]
+* value: PWM value, will be rounded to integer
+```cpp
+ssc.setServoPin(4, 0, 1400); // L3, teta, 1400 micro seconds
+```
+
+##### char * ssc.getPrintable()
+Get printable SSC-32 serial command. Implementation example:
+```cpp
+SoftwareSerial com(1, 2); // TX, RX
+com.println(ssc.getPrintable());
 ```
 
 ### Run Tests

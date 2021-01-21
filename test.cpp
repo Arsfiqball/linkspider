@@ -1,5 +1,5 @@
-#include <cmath>
-#include <iostream>
+#include <math.h>
+#include <string.h>
 #include "submodules/acutest/include/acutest.h"
 #include "linkspider.h"
 
@@ -173,8 +173,55 @@ void test_posture_static_position (void) {
   TEST_CHECK(abs(posture.getCoordinate(5, 2) - (-9.7991)) < tolerance);
 }
 
+void test_connector_ssc32 (void) {
+  LinkSpider_ConnectorSSC32 ssc;
+  ssc.setServoPin(0, 0, 1);
+  ssc.setServoPin(0, 1, 2);
+  ssc.setServoPin(0, 2, 3);
+  ssc.setServoPin(1, 0, 24);
+  ssc.setServoPin(1, 1, 23);
+  ssc.setServoPin(1, 2, 22);
+  ssc.setServoPin(2, 0, 4);
+  ssc.setServoPin(2, 1, 5);
+  ssc.setServoPin(2, 2, 6);
+  ssc.setServoPin(3, 0, 21);
+  ssc.setServoPin(3, 1, 20);
+  ssc.setServoPin(3, 2, 19);
+  ssc.setServoPin(4, 0, 7);
+  ssc.setServoPin(4, 1, 8);
+  ssc.setServoPin(4, 2, 9);
+  ssc.setServoPin(5, 0, 18);
+  ssc.setServoPin(5, 1, 17);
+  ssc.setServoPin(5, 2, 16);
+  ssc.setServoValue(0, 0, 1500);
+  ssc.setServoValue(0, 1, 1000);
+  ssc.setServoValue(0, 2, 2000);
+  ssc.setServoValue(1, 0, 1500);
+  ssc.setServoValue(1, 1, 1500);
+  ssc.setServoValue(1, 2, 1000);
+  ssc.setServoValue(2, 0, 2000);
+  ssc.setServoValue(2, 1, 2000);
+  ssc.setServoValue(2, 2, 1500);
+  ssc.setServoValue(3, 0, 2000);
+  ssc.setServoValue(3, 1, 2000);
+  ssc.setServoValue(3, 2, 1500);
+  ssc.setServoValue(4, 0, 1500);
+  ssc.setServoValue(4, 1, 1000);
+  ssc.setServoValue(4, 2, 1500);
+  ssc.setServoValue(5, 0, 1500);
+  ssc.setServoValue(5, 1, 1000);
+  ssc.setServoValue(5, 2, 2000);
+  ssc.setInterval(400);
+  ssc.compute();
+
+  char expected[200];
+  strcpy(expected, "#1P1500 #2P1000 #3P2000 #24P1500 #23P1500 #22P1000 #4P2000 #5P2000 #6P1500 #21P2000 #20P2000 #19P1500 #7P1500 #8P1000 #9P1500 #18P1500 #17P1000 #16P2000 T400");
+  TEST_CHECK(strcmp(ssc.getPrintable(), expected) == 0);
+}
+
 TEST_LIST = {
   { "Test Single Leg Static Position", test_single_leg_static_position },
   { "Test Posture Static Position", test_posture_static_position },
+  { "Test Connector SSC32", test_connector_ssc32 },
   { NULL, NULL }
 };
