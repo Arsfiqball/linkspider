@@ -108,4 +108,111 @@ public:
   }
 };
 
+class LinkSpider_Posture
+{
+protected:
+  double state_frs;
+  double state_ms;
+  double state_l;
+  double state_h;
+  double state_rx;
+  double state_ry;
+  double state_rz;
+  double computed_legs[6][3];
+
+public:
+  LinkSpider_Posture () {
+    state_frs = 0;
+    state_ms = 0;
+    state_l = 0;
+    state_h = 0;
+    state_rx = 0;
+    state_ry = 0;
+    state_rz = 0;
+  }
+
+public:
+  void compute () {
+    computed_legs[0][0] = - state_frs / 2;
+    computed_legs[0][1] = state_l / 2;
+    computed_legs[0][2] = - state_h;
+
+    computed_legs[2][0] = - state_ms / 2;
+    computed_legs[2][1] = 0;
+    computed_legs[2][2] = - state_h;
+
+    computed_legs[4][0] = - state_frs / 2;
+    computed_legs[4][1] = - state_l / 2;
+    computed_legs[4][2] = - state_h;
+
+    computed_legs[1][0] = state_frs / 2;
+    computed_legs[1][1] = state_l / 2;
+    computed_legs[1][2] = - state_h;
+
+    computed_legs[3][0] = state_ms / 2;
+    computed_legs[3][1] = 0;
+    computed_legs[3][2] = - state_h;
+
+    computed_legs[5][0] = state_frs / 2;
+    computed_legs[5][1] = - state_l / 2;
+    computed_legs[5][2] = - state_h;
+
+    for (int i = 0; i < 6; i++) {
+      double x0 = computed_legs[i][0];
+      double y0 = computed_legs[i][1];
+      double z0 = computed_legs[i][2];
+
+      // process pitch
+      double x1 = x0;
+      double y1 = y0 * cos(state_rx) - z0 * sin(state_rx);
+      double z1 = y0 * sin(state_rx) + z0 * cos(state_rx);
+
+      // process roll
+      double x2 = x1 * cos(state_ry) + z1 * sin(state_ry);
+      double y2 = y1;
+      double z2 = - x1 * sin(state_ry) + z1 * cos(state_ry);
+
+      // process yaw
+      double x3 = x2 * cos(state_rz) - y2 * sin(state_rz);
+      double y3 = x2 * sin(state_rz) + y2 * cos(state_rz);
+      double z3 = z2;
+
+      computed_legs[i][0] = x3;
+      computed_legs[i][1] = y3;
+      computed_legs[i][2] = z3;
+    }
+  }
+
+public:
+  void setNormalPos (double frs, double ms, double l, double h) {
+    // frs = front and rear span, ms = middle span, l = length, h = height
+    state_frs = frs;
+    state_ms = ms;
+    state_l = l;
+    state_h = h;
+  }
+
+public:
+  void setRotationRad (double rx, double ry, double rz) {
+    // rx = pitch, ry = roll, rz = yaw
+    state_rx = rx;
+    state_ry = ry;
+    state_rz = rz;
+  }
+
+public:
+  void setRotationDeg (double rx, double ry, double rz) {
+    rx = rx * 180 / M_PI;
+    ry = ry * 180 / M_PI;
+    rz = rz * 180 / M_PI;
+    setRotationRad(rx, ry, rz);
+  }
+
+public:
+  double getCoordinate (unsigned int legIndex, unsigned int vectorIndex) {
+    // legIndex -> [L1, R1, L2, R2, L3, R3], vectorIndex -> [x, y, z]
+    return computed_legs[legIndex][vectorIndex];
+  }
+};
+
 #endif

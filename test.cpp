@@ -111,7 +111,58 @@ void test_single_leg_static_position (void) {
   TEST_CHECK(abs(leg.getAngleRad(2) - 1.8493) < tolerance);
 }
 
+void test_posture_static_position (void) {
+  double tolerance = .05;
+  LinkSpider_Posture posture;
+
+  TEST_CASE("frs = 17, ms = 22, l = 24, h = 5");
+  posture.setNormalPos(17, 22, 24, 5);
+
+  posture.setRotationRad(0.2106, -0.1321, 0.2606);
+  posture.compute();
+  TEST_CHECK(abs(posture.getCoordinate(0, 0) - (-11.1315)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(0, 1) - (10.2583)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(0, 2) - (-3.4793)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 0) - (5.1513)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 1) - (14.6005)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 2) - (-1.2403)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 0) - (-10.1831)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 1) - (-1.6336)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 2) - (-6.2956)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 0) - (10.8888)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 1) - (3.9856)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 2) - (-3.3981)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 0) - (-4.4455)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 1) - (-12.2485)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 2) - (-8.4534)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 0) - (11.8372)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 1) - (-7.9062)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 2) - (-6.2144)) < tolerance);
+
+  posture.setRotationRad(0.3963, 0.0678, -0.3534);
+  posture.compute();
+  TEST_CHECK(abs(posture.getCoordinate(0, 0) - (-3.4555)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(0, 1) - (15.1312)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(0, 2) - (0.5952)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 0) - (12.4570)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 1) - (9.2607)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(1, 2) - (-0.5569)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 0) - (-9.9217)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 1) - (5.7173)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(2, 2) - (-3.8563)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 0) - (10.6710)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 1) - (-1.8797)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(3, 2) - (-5.3474)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 0) - (-11.7076)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 1) - (-5.4231)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(4, 2) - (-8.6469)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 0) - (4.2048)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 1) - (-11.2936)) < tolerance);
+  TEST_CHECK(abs(posture.getCoordinate(5, 2) - (-9.7991)) < tolerance);
+}
+
 TEST_LIST = {
   { "Test Single Leg Static Position", test_single_leg_static_position },
+  { "Test Posture Static Position", test_posture_static_position },
   { NULL, NULL }
 };
