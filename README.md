@@ -5,6 +5,7 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
 <!-- code_chunk_output -->
 
 - [Features](#features)
+- [Installation](#installation)
 - [LinkSpider API](#linkspider-api)
   - [LinkSpider_Leg leg(void)](#linkspider_leg-legvoid)
     - [void leg.compute()](#void-legcompute)
@@ -32,6 +33,7 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
     - [void ssc.setServoValue(unsigned int legIndex, unsigned int servoIndex, double value)](#void-sscsetservovalueunsigned-int-legindex-unsigned-int-servoindex-double-value)
     - [char * ssc.getPrintable()](#char-sscgetprintable)
 - [Run Tests](#run-tests)
+- [Related Research](#related-research)
 - [References](#references)
 
 <!-- /code_chunk_output -->
@@ -48,6 +50,13 @@ C ++ based inverse kinematics solver and algorithm for static positioning, walki
 * [ ] Adjustable step span
 * [x] Adjustable leg span
 * [x] Rotation at X / Y / Z axis
+
+### Installation
+Download and copy this repository to your modules folder or just clone this repository as a git submodule.
+```sh
+git submodule add https://github.com/Arsfiqball/linkspider.git submodules/linkspider
+```
+And that's it.
 
 ### LinkSpider API
 The API have several class which have different usage and should be constructed
@@ -264,6 +273,10 @@ com.println(ssc.getPrintable());
 g++ -o test test.cpp
 ./test
 ```
+
+### Related Research
+* [LinkSpider: Single Leg Simulation for Evaluation](https://observablehq.com/@arsfiqball/linkspider-single-leg-simulation-for-evaluation)
+* [LinkSpider: Posture Simulation for Evaluation](https://observablehq.com/@arsfiqball/linkspider-single-posture-simulation-for-evaluation)
 
 ### References
 * [Hexapod Inverse Kinematics Equations](https://toglefritz.com/hexapod-inverse-kinematics-equations/) by Toglefritz
