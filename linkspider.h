@@ -4,6 +4,23 @@
 #include <math.h>
 #include <stdio.h>
 
+enum LinkSpider_LegIndex_t {
+  L1 = 0, R1 = 1,
+  L2 = 2, R2 = 3,
+  L3 = 4, R3 = 5
+};
+
+enum LinkSpider_ServoIndex_t {
+  SERVO_1 = 0,
+  SERVO_2 = 1,
+  SERVO_3 = 2
+};
+
+enum LinkSpider_ComboIndex_t {
+  COMBO_A = 0,
+  COMBO_B = 1
+};
+
 class LinkSpider_Leg
 {
 protected:
@@ -207,9 +224,9 @@ public:
 
 public:
   void setRotationDeg (double rx, double ry, double rz) {
-    rx = rx * 180 / M_PI;
-    ry = ry * 180 / M_PI;
-    rz = rz * 180 / M_PI;
+    rx = rx * M_PI / 180;
+    ry = ry * M_PI / 180;
+    rz = rz * M_PI / 180;
     setRotationRad(rx, ry, rz);
   }
 
