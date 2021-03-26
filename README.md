@@ -18,7 +18,7 @@ Download and copy this repository to your modules folder or just clone this repo
 ```sh
 git submodule add https://github.com/Arsfiqball/linkspider.git submodules/linkspider
 ```
-Read the [API Documentation](/docs/API.md) for detailed usage.
+Read the [Definitions](/docs/Definitions.md) and [API Documentation](/docs/API.md) for detailed usage.
 
 ### Run Tests
 ```sh
