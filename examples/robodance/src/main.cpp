@@ -9,6 +9,7 @@ int pressed = 0;
 double pitch = 0.0;
 double roll = 0.0;
 double yaw = 0.0;
+double height = 7;
 
 LinkSpider_ConnectorSSC32 connectorSSC;
 LinkSpider_Leg leg[6];
@@ -22,8 +23,8 @@ const double anchorRotDegs[6] = {
 
 void setup() {
   // Setup serial connection
-  Serial.begin(9600);  // Serial Monitor
-  serialSSC.begin(9600);     // Serial connection to SSC 32
+  Serial.begin(9600);     // Serial Monitor
+  serialSSC.begin(9600);  // Serial connection to SSC 32
 
   // Setup anchor positions
   leg[L1].setAnchorPos(-3.75, 7.5, 0);
@@ -105,8 +106,9 @@ void setup() {
   connectorSSC.setServoPin(R3, SERVO_2, 29);
   connectorSSC.setServoPin(R3, SERVO_3, 30);
 
-  // Set normal position (FRS, MS, L, H)
-  posture.setNormalPos(20, 30, 30, 7);
+  // Set normal position (RX, RY, RZ) (FRS, MS, L, H)
+  posture.setRotationRad(0, 0, 0);
+  posture.setNormalPos(20, 30, 30, height);
 
   // Set frame length on each legs (coxa, femur, tibia)
   for (size_t i = 0; i < 6; i++) {
@@ -128,9 +130,12 @@ void loop() {
     if (pressed == 's') roll += 1;
     if (pressed == 'z') yaw -= 1;
     if (pressed == 'x') yaw += 1;
+    if (pressed == '1') height -= 0.3;
+    if (pressed == '2') height += 0.3;
 
     // Set rx, ry, rz and compute
     posture.setRotationRad(pitch * M_PI / 180, roll * M_PI / 180, yaw * M_PI / 180);
+    posture.setNormalPos(20, 20, 30, height);
     posture.compute();
 
     // Set tip position of all legs, compute and set it to SSC servo PWM
@@ -149,6 +154,6 @@ void loop() {
   }
 
   // Debug
-  Serial.println(String("Pitch: ") + pitch + " Roll: " + roll + " Yaw: " + yaw);
+  Serial.println(String("Pitch: ") + pitch + " Roll: " + roll + " Yaw: " + yaw + " Height: " + height);
   delay(50);
 }
